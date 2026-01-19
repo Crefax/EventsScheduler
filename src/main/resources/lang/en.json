@@ -1,0 +1,26 @@
+{
+    "prefix": "[Events] ",
+    "messages": {
+        "no_permission": "You don't have permission to use this command!",
+        "event_triggered": "Event '{event}' has been triggered!",
+        "event_not_found": "Event '{event}' was not found!",
+        "event_enabled": "Event '{event}' has been enabled!",
+        "event_disabled": "Event '{event}' has been disabled!",
+        "config_reloaded": "Configuration reloaded successfully!",
+        "help_title": "========== Events Scheduler ==========",
+        "help_list": "/events list - List all events",
+        "help_trigger": "/events trigger <name> - Manually trigger an event",
+        "help_enable": "/events enable <name> - Enable an event",
+        "help_disable": "/events disable <name> - Disable an event",
+        "help_reload": "/events reload - Reload configuration",
+        "help_footer": "=======================================",
+        "list_interval_title": "========== Interval Events ==========",
+        "list_scheduled_title": "========== Scheduled Events ==========",
+        "list_footer": "======================================",
+        "status_active": "[ACTIVE]",
+        "status_inactive": "[DISABLED]",
+        "interval_format": "{status} {name} - Every {interval} seconds",
+        "scheduled_format": "{status} {name} - Times: {times}",
+        "commands_label": "  Commands: {commands}"
+    }
+}

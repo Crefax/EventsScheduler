@@ -1,0 +1,14 @@
+{
+    "Group": "EventScheduler",
+    "Name": "EventScheduler",
+    "Description": "Scheduled event and reward distribution system",
+    "Version": "1.0.0",
+    "Website": "https://github.com/crefax/hytale-events",
+    "Main": "net.crefax.hytale.events.EventSchedulerMod",
+    "ServerVersion": "*",
+    "Dependencies": {
+        "Hytale:EntityModule": "*",
+        "Hytale:ItemModule": "*",
+        "Hytale:I18nModule": "*"
+    }
+}

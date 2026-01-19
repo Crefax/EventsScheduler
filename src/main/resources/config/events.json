@@ -1,0 +1,55 @@
+{
+    "broadcastPrefix": "[Events] ",
+    
+    "intervalEvents": [
+        {
+            "name": "hourly_reward",
+            "enabled": true,
+            "interval": 3600,
+            "commands": [
+                "give Weapon_Sword_Cobalt"
+            ],
+            "broadcastMessage": "Hourly reward! Cobalt Sword distributed to all players!"
+        },
+        {
+            "name": "bonus_tools",
+            "enabled": false,
+            "interval": 7200,
+            "commands": [
+                "give Tool_Pickaxe_Crude",
+                "give Tool_Hatchet_Crude"
+            ],
+            "broadcastMessage": "Bonus reward! Pickaxe and Hatchet distributed!"
+        }
+    ],
+    
+    "scheduledEvents": [
+        {
+            "name": "morning_reward",
+            "enabled": true,
+            "times": ["09:00", "12:00", "18:00", "21:00"],
+            "commands": [
+                "give Weapon_Sword_Crude",
+                "give Tool_Pickaxe_Crude"
+            ],
+            "broadcastMessage": "Daily reward time! Sword and Pickaxe distributed!"
+        },
+        {
+            "name": "midnight_bonus",
+            "enabled": true,
+            "times": ["00:00"],
+            "commands": [
+                "give Weapon_Staff_Cobalt",
+                "message You earned a midnight bonus!"
+            ],
+            "broadcastMessage": "Midnight bonus! You earned a Cobalt Staff!"
+        }
+    ],
+    
+    "settings": {
+        "timezone": "Europe/London",
+        "debugMode": false,
+        "minPlayersRequired": 0,
+        "cooldownBetweenEvents": 0
+    }
+}
