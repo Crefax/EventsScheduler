@@ -6,6 +6,7 @@ import com.hypixel.hytale.server.core.command.system.CommandContext;
 
 import net.crefax.hytale.events.EventSchedulerMod;
 import net.crefax.hytale.events.manager.SchedulerManager;
+import net.crefax.hytale.events.i18n.I18nManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,9 +34,13 @@ public class EventsReloadCommand extends AbstractCommand {
     @Override
     protected CompletableFuture<Void> execute(@Nonnull CommandContext context) {
         SchedulerManager scheduler = plugin.getSchedulerManager();
-        scheduler.reload();
+        I18nManager i18n = plugin.getI18n();
         
-        context.sendMessage(Message.raw("[Events] Config reloaded successfully!"));
+        scheduler.reload();
+        i18n.reload();
+        i18n.setLanguage(plugin.getConfig().getSettings().language);
+        
+        context.sendMessage(Message.raw(i18n.getPrefix() + i18n.getMessage("commands.reload.success")));
         
         return CompletableFuture.completedFuture(null);
     }

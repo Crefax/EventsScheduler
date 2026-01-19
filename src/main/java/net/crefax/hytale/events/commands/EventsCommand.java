@@ -10,6 +10,7 @@ import net.crefax.hytale.events.config.EventConfig;
 import net.crefax.hytale.events.config.EventConfig.IntervalEvent;
 import net.crefax.hytale.events.config.EventConfig.ScheduledEvent;
 import net.crefax.hytale.events.manager.SchedulerManager;
+import net.crefax.hytale.events.i18n.I18nManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,38 +38,46 @@ public class EventsCommand extends AbstractCommand {
     @Nullable
     @Override
     protected CompletableFuture<Void> execute(@Nonnull CommandContext context) {
-        // list, reload veya help
         showEventList(context);
         return CompletableFuture.completedFuture(null);
     }
 
     private void showEventList(CommandContext context) {
         EventConfig config = plugin.getConfig();
+        I18nManager i18n = plugin.getI18n();
         
-        context.sendMessage(Message.raw("========== Events Scheduler =========="));
-        context.sendMessage(Message.raw(""));
-        context.sendMessage(Message.raw("--- Interval Events ---"));
+        context.sendMessage(Message.raw(i18n.getMessage("commands.events.title")));
+        context.sendMessage(Message.raw(i18n.getMessage("commands.events.empty")));
+        context.sendMessage(Message.raw(i18n.getMessage("commands.events.interval_title")));
         
         for (IntervalEvent event : config.getIntervalEvents()) {
-            String status = event.enabled ? "[ACTIVE]" : "[DISABLED]";
-            context.sendMessage(Message.raw(status + " " + event.name + " - Every " + event.interval + " seconds"));
-            context.sendMessage(Message.raw("  Commands: " + String.join(", ", event.commands)));
+            String status = event.enabled 
+                ? i18n.getMessage("commands.events.status_active") 
+                : i18n.getMessage("commands.events.status_disabled");
+            context.sendMessage(Message.raw(i18n.getMessage("commands.events.interval_format", 
+                status, event.name, String.valueOf(event.interval))));
+            context.sendMessage(Message.raw(i18n.getMessage("commands.events.commands_format", 
+                String.join(", ", event.commands))));
         }
         
-        context.sendMessage(Message.raw(""));
-        context.sendMessage(Message.raw("--- Scheduled Events ---"));
+        context.sendMessage(Message.raw(i18n.getMessage("commands.events.empty")));
+        context.sendMessage(Message.raw(i18n.getMessage("commands.events.scheduled_title")));
         
         for (ScheduledEvent event : config.getScheduledEvents()) {
-            String status = event.enabled ? "[ACTIVE]" : "[DISABLED]";
-            context.sendMessage(Message.raw(status + " " + event.name + " - Times: " + String.join(", ", event.times)));
-            context.sendMessage(Message.raw("  Commands: " + String.join(", ", event.commands)));
+            String status = event.enabled 
+                ? i18n.getMessage("commands.events.status_active") 
+                : i18n.getMessage("commands.events.status_disabled");
+            context.sendMessage(Message.raw(i18n.getMessage("commands.events.scheduled_format", 
+                status, event.name, String.join(", ", event.times))));
+            context.sendMessage(Message.raw(i18n.getMessage("commands.events.commands_format", 
+                String.join(", ", event.commands))));
         }
         
-        context.sendMessage(Message.raw(""));
-        context.sendMessage(Message.raw("Commands:"));
-        context.sendMessage(Message.raw("  /eventstrigger --eventName <name> - Trigger event manually"));
-        context.sendMessage(Message.raw("  /eventsreload - Reload config"));
-        context.sendMessage(Message.raw("  /events - Show event list"));
-        context.sendMessage(Message.raw("======================================="));
+        context.sendMessage(Message.raw(i18n.getMessage("commands.events.empty")));
+        context.sendMessage(Message.raw(i18n.getMessage("commands.events.commands_title")));
+        context.sendMessage(Message.raw(i18n.getMessage("commands.events.help_trigger")));
+        context.sendMessage(Message.raw(i18n.getMessage("commands.events.help_reload")));
+        context.sendMessage(Message.raw(i18n.getMessage("commands.events.help_list")));
+        context.sendMessage(Message.raw(i18n.getMessage("commands.events.footer")));
     }
 }

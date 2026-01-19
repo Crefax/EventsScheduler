@@ -1,26 +1,47 @@
 {
     "prefix": "[Events] ",
-    "messages": {
+    
+    "commands": {
         "no_permission": "Bu komutu kullanma yetkiniz yok!",
-        "event_triggered": "'{event}' eventi calistirildi!",
-        "event_not_found": "'{event}' adinda bir event bulunamadi!",
-        "event_enabled": "'{event}' eventi aktif edildi!",
-        "event_disabled": "'{event}' eventi devre disi birakildi!",
-        "config_reloaded": "Config basariyla yeniden yuklendi!",
-        "help_title": "========== Events Scheduler ==========",
-        "help_list": "/events list - Tum eventleri listele",
-        "help_trigger": "/events trigger <ad> - Eventi manuel calistir",
-        "help_enable": "/events enable <ad> - Eventi aktif et",
-        "help_disable": "/events disable <ad> - Eventi devre disi birak",
-        "help_reload": "/events reload - Config'i yeniden yukle",
-        "help_footer": "=======================================",
-        "list_interval_title": "========== Interval Events ==========",
-        "list_scheduled_title": "========== Scheduled Events ==========",
-        "list_footer": "======================================",
-        "status_active": "[AKTIF]",
-        "status_inactive": "[KAPALI]",
-        "interval_format": "{status} {name} - Her {interval} saniye",
-        "scheduled_format": "{status} {name} - Saatler: {times}",
-        "commands_label": "  Komutlar: {commands}"
+        "usage": "Kullanim: {0}",
+        
+        "events": {
+            "title": "========== Events Scheduler ==========",
+            "interval_title": "--- Interval Events ---",
+            "scheduled_title": "--- Scheduled Events ---",
+            "commands_title": "Komutlar:",
+            "footer": "=======================================",
+            "empty": "",
+            "status_active": "[AKTIF]",
+            "status_disabled": "[KAPALI]",
+            "interval_format": "{0} {1} - Her {2} saniye",
+            "scheduled_format": "{0} {1} - Saatler: {2}",
+            "commands_format": "  Komutlar: {0}",
+            "help_trigger": "  /eventstrigger --eventName <ad> - Eventi manuel calistir",
+            "help_reload": "  /eventsreload - Config'i yeniden yukle",
+            "help_list": "  /events - Event listesini goster"
+        },
+        
+        "trigger": {
+            "usage": "/eventstrigger --eventName <eventAdi>",
+            "success": "'{0}' eventi calistirildi!",
+            "not_found": "'{0}' adinda bir event bulunamadi!"
+        },
+        
+        "reload": {
+            "success": "Config basariyla yeniden yuklendi!"
+        }
+    },
+    
+    "events": {
+        "broadcast_prefix": "[Events] ",
+        "min_players_not_met": "{0} iptal: Yeterli oyuncu yok ({1}/{2})"
+    },
+    
+    "general": {
+        "enabled": "Aktif",
+        "disabled": "Kapali",
+        "yes": "Evet",
+        "no": "Hayir"
     }
 }

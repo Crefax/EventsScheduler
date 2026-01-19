@@ -11,6 +11,7 @@ import net.crefax.hytale.events.commands.EventsTriggerCommand;
 import net.crefax.hytale.events.commands.EventsReloadCommand;
 import net.crefax.hytale.events.manager.SchedulerManager;
 import net.crefax.hytale.events.config.EventConfig;
+import net.crefax.hytale.events.i18n.I18nManager;
 
 import javax.annotation.Nonnull;
 import java.util.logging.Logger;
@@ -31,6 +32,7 @@ public class EventSchedulerMod extends JavaPlugin {
     private static EventSchedulerMod instance;
     private SchedulerManager schedulerManager;
     private EventConfig config;
+    private I18nManager i18n;
 
     public EventSchedulerMod(@Nonnull JavaPluginInit init) {
         super(init);
@@ -48,6 +50,10 @@ public class EventSchedulerMod extends JavaPlugin {
         // Load config
         this.config = new EventConfig();
         this.config.load();
+        
+        // Load i18n
+        this.i18n = new I18nManager();
+        this.i18n.setLanguage(config.getSettings().language);
         
         // Start scheduler
         this.schedulerManager = new SchedulerManager(this, config);
@@ -82,5 +88,9 @@ public class EventSchedulerMod extends JavaPlugin {
 
     public EventConfig getConfig() {
         return config;
+    }
+
+    public I18nManager getI18n() {
+        return i18n;
     }
 }

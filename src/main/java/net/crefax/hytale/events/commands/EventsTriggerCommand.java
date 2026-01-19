@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 
 import net.crefax.hytale.events.EventSchedulerMod;
 import net.crefax.hytale.events.manager.SchedulerManager;
+import net.crefax.hytale.events.i18n.I18nManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,9 +38,11 @@ public class EventsTriggerCommand extends AbstractCommand {
     @Override
     protected CompletableFuture<Void> execute(@Nonnull CommandContext context) {
         String eventName = context.get(eventNameArg);
+        I18nManager i18n = plugin.getI18n();
         
         if (eventName == null || eventName.isEmpty()) {
-            context.sendMessage(Message.raw("[Events] Usage: /eventstrigger --eventName <eventName>"));
+            context.sendMessage(Message.raw(i18n.getPrefix() + i18n.getMessage("commands.usage", 
+                i18n.getMessage("commands.trigger.usage"))));
             return CompletableFuture.completedFuture(null);
         }
         
@@ -47,9 +50,9 @@ public class EventsTriggerCommand extends AbstractCommand {
         boolean found = scheduler.triggerEvent(eventName);
         
         if (found) {
-            context.sendMessage(Message.raw("[Events] '" + eventName + "' event triggered!"));
+            context.sendMessage(Message.raw(i18n.getPrefix() + i18n.getMessage("commands.trigger.success", eventName)));
         } else {
-            context.sendMessage(Message.raw("[Events] No event found with name '" + eventName + "'!"));
+            context.sendMessage(Message.raw(i18n.getPrefix() + i18n.getMessage("commands.trigger.not_found", eventName)));
         }
         
         return CompletableFuture.completedFuture(null);

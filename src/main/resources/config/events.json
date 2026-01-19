@@ -48,6 +48,7 @@
     
     "settings": {
         "timezone": "Europe/London",
+        "language": "en",
         "debugMode": false,
         "minPlayersRequired": 0,
         "cooldownBetweenEvents": 0

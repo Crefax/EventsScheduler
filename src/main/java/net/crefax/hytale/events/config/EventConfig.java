@@ -109,6 +109,7 @@ public class EventConfig {
             if (root.has("settings")) {
                 JsonObject s = root.getAsJsonObject("settings");
                 if (s.has("timezone")) settings.timezone = s.get("timezone").getAsString();
+                if (s.has("language")) settings.language = s.get("language").getAsString();
                 if (s.has("debugMode")) settings.debugMode = s.get("debugMode").getAsBoolean();
                 if (s.has("minPlayersRequired")) settings.minPlayersRequired = s.get("minPlayersRequired").getAsInt();
                 if (s.has("cooldownBetweenEvents")) settings.cooldownBetweenEvents = s.get("cooldownBetweenEvents").getAsInt();
@@ -159,6 +160,7 @@ public class EventConfig {
                     
                     "settings": {
                         "timezone": "Europe/London",
+                        "language": "en",
                         "debugMode": false,
                         "minPlayersRequired": 0,
                         "cooldownBetweenEvents": 0
@@ -208,6 +210,7 @@ public class EventConfig {
 
     public static class Settings {
         public String timezone = "Europe/London";
+        public String language = "en";
         public boolean debugMode = false;
         public int minPlayersRequired = 0;
         public int cooldownBetweenEvents = 0;
