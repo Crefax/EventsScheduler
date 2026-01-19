@@ -1,0 +1,47 @@
+{
+    "prefix": "[Events] ",
+    
+    "commands": {
+        "no_permission": "¡No tienes permiso para usar este comando!",
+        "usage": "Uso: {0}",
+        
+        "events": {
+            "title": "========== Events Scheduler ==========",
+            "interval_title": "--- Eventos de Intervalo ---",
+            "scheduled_title": "--- Eventos Programados ---",
+            "commands_title": "Comandos:",
+            "footer": "=======================================",
+            "empty": "",
+            "status_active": "[ACTIVO]",
+            "status_disabled": "[DESACTIVADO]",
+            "interval_format": "{0} {1} - Cada {2} segundos",
+            "scheduled_format": "{0} {1} - Horarios: {2}",
+            "commands_format": "  Comandos: {0}",
+            "help_trigger": "  /eventstrigger --eventName <nombre> - Activar evento manualmente",
+            "help_reload": "  /eventsreload - Recargar configuración",
+            "help_list": "  /events - Mostrar lista de eventos"
+        },
+        
+        "trigger": {
+            "usage": "/eventstrigger --eventName <nombreEvento>",
+            "success": "¡Evento '{0}' activado!",
+            "not_found": "¡No se encontró ningún evento con el nombre '{0}'!"
+        },
+        
+        "reload": {
+            "success": "¡Configuración recargada exitosamente!"
+        }
+    },
+    
+    "events": {
+        "broadcast_prefix": "[Events] ",
+        "min_players_not_met": "{0} cancelado: No hay suficientes jugadores ({1}/{2})"
+    },
+    
+    "general": {
+        "enabled": "Activado",
+        "disabled": "Desactivado",
+        "yes": "Sí",
+        "no": "No"
+    }
+}

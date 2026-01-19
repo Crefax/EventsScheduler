@@ -1,0 +1,47 @@
+{
+    "prefix": "[Events] ",
+    
+    "commands": {
+        "no_permission": "Du hast keine Berechtigung, diesen Befehl zu verwenden!",
+        "usage": "Verwendung: {0}",
+        
+        "events": {
+            "title": "========== Events Scheduler ==========",
+            "interval_title": "--- Intervall-Events ---",
+            "scheduled_title": "--- Geplante Events ---",
+            "commands_title": "Befehle:",
+            "footer": "=======================================",
+            "empty": "",
+            "status_active": "[AKTIV]",
+            "status_disabled": "[DEAKTIVIERT]",
+            "interval_format": "{0} {1} - Alle {2} Sekunden",
+            "scheduled_format": "{0} {1} - Zeiten: {2}",
+            "commands_format": "  Befehle: {0}",
+            "help_trigger": "  /eventstrigger --eventName <name> - Event manuell auslösen",
+            "help_reload": "  /eventsreload - Konfiguration neu laden",
+            "help_list": "  /events - Eventliste anzeigen"
+        },
+        
+        "trigger": {
+            "usage": "/eventstrigger --eventName <eventName>",
+            "success": "Event '{0}' wurde ausgelöst!",
+            "not_found": "Kein Event mit dem Namen '{0}' gefunden!"
+        },
+        
+        "reload": {
+            "success": "Konfiguration erfolgreich neu geladen!"
+        }
+    },
+    
+    "events": {
+        "broadcast_prefix": "[Events] ",
+        "min_players_not_met": "{0} abgebrochen: Nicht genügend Spieler ({1}/{2})"
+    },
+    
+    "general": {
+        "enabled": "Aktiviert",
+        "disabled": "Deaktiviert",
+        "yes": "Ja",
+        "no": "Nein"
+    }
+}
