@@ -4,6 +4,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.AbstractCommand;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 
 import net.crefax.hytale.events.EventSchedulerMod;
 import net.crefax.hytale.events.config.EventConfig;
@@ -46,38 +47,41 @@ public class EventsCommand extends AbstractCommand {
         EventConfig config = plugin.getConfig();
         I18nManager i18n = plugin.getI18n();
         
-        context.sendMessage(Message.raw(i18n.getMessage("commands.events.title")));
-        context.sendMessage(Message.raw(i18n.getMessage("commands.events.empty")));
-        context.sendMessage(Message.raw(i18n.getMessage("commands.events.interval_title")));
+        // Get player for per-player language support
+        Player player = context.isPlayer() ? context.senderAs(Player.class) : null;
+        
+        context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.title")));
+        context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.empty")));
+        context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.interval_title")));
         
         for (IntervalEvent event : config.getIntervalEvents()) {
             String status = event.enabled 
-                ? i18n.getMessage("commands.events.status_active") 
-                : i18n.getMessage("commands.events.status_disabled");
-            context.sendMessage(Message.raw(i18n.getMessage("commands.events.interval_format", 
+                ? i18n.getMessage(player, "commands.events.status_active") 
+                : i18n.getMessage(player, "commands.events.status_disabled");
+            context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.interval_format", 
                 status, event.name, String.valueOf(event.interval))));
-            context.sendMessage(Message.raw(i18n.getMessage("commands.events.commands_format", 
+            context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.commands_format", 
                 String.join(", ", event.commands))));
         }
         
-        context.sendMessage(Message.raw(i18n.getMessage("commands.events.empty")));
-        context.sendMessage(Message.raw(i18n.getMessage("commands.events.scheduled_title")));
+        context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.empty")));
+        context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.scheduled_title")));
         
         for (ScheduledEvent event : config.getScheduledEvents()) {
             String status = event.enabled 
-                ? i18n.getMessage("commands.events.status_active") 
-                : i18n.getMessage("commands.events.status_disabled");
-            context.sendMessage(Message.raw(i18n.getMessage("commands.events.scheduled_format", 
+                ? i18n.getMessage(player, "commands.events.status_active") 
+                : i18n.getMessage(player, "commands.events.status_disabled");
+            context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.scheduled_format", 
                 status, event.name, String.join(", ", event.times))));
-            context.sendMessage(Message.raw(i18n.getMessage("commands.events.commands_format", 
+            context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.commands_format", 
                 String.join(", ", event.commands))));
         }
         
-        context.sendMessage(Message.raw(i18n.getMessage("commands.events.empty")));
-        context.sendMessage(Message.raw(i18n.getMessage("commands.events.commands_title")));
-        context.sendMessage(Message.raw(i18n.getMessage("commands.events.help_trigger")));
-        context.sendMessage(Message.raw(i18n.getMessage("commands.events.help_reload")));
-        context.sendMessage(Message.raw(i18n.getMessage("commands.events.help_list")));
-        context.sendMessage(Message.raw(i18n.getMessage("commands.events.footer")));
+        context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.empty")));
+        context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.commands_title")));
+        context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.help_trigger")));
+        context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.help_reload")));
+        context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.help_list")));
+        context.sendMessage(Message.raw(i18n.getMessage(player, "commands.events.footer")));
     }
 }

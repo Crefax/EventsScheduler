@@ -3,6 +3,7 @@ package net.crefax.hytale.events.commands;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.AbstractCommand;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 
 import net.crefax.hytale.events.EventSchedulerMod;
 import net.crefax.hytale.events.manager.SchedulerManager;
@@ -35,12 +36,13 @@ public class EventsReloadCommand extends AbstractCommand {
     protected CompletableFuture<Void> execute(@Nonnull CommandContext context) {
         SchedulerManager scheduler = plugin.getSchedulerManager();
         I18nManager i18n = plugin.getI18n();
+        Player player = context.isPlayer() ? context.senderAs(Player.class) : null;
         
         scheduler.reload();
         i18n.reload();
         i18n.setLanguage(plugin.getConfig().getSettings().language);
         
-        context.sendMessage(Message.raw(i18n.getPrefix() + i18n.getMessage("commands.reload.success")));
+        context.sendMessage(Message.raw(i18n.getPrefix(player) + i18n.getMessage(player, "commands.reload.success")));
         
         return CompletableFuture.completedFuture(null);
     }

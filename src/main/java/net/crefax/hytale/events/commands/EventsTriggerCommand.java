@@ -5,6 +5,7 @@ import com.hypixel.hytale.server.core.command.system.AbstractCommand;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.arguments.system.OptionalArg;
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 
 import net.crefax.hytale.events.EventSchedulerMod;
 import net.crefax.hytale.events.manager.SchedulerManager;
@@ -39,10 +40,11 @@ public class EventsTriggerCommand extends AbstractCommand {
     protected CompletableFuture<Void> execute(@Nonnull CommandContext context) {
         String eventName = context.get(eventNameArg);
         I18nManager i18n = plugin.getI18n();
+        Player player = context.isPlayer() ? context.senderAs(Player.class) : null;
         
         if (eventName == null || eventName.isEmpty()) {
-            context.sendMessage(Message.raw(i18n.getPrefix() + i18n.getMessage("commands.usage", 
-                i18n.getMessage("commands.trigger.usage"))));
+            context.sendMessage(Message.raw(i18n.getPrefix(player) + i18n.getMessage(player, "commands.usage", 
+                i18n.getMessage(player, "commands.trigger.usage"))));
             return CompletableFuture.completedFuture(null);
         }
         
@@ -50,9 +52,9 @@ public class EventsTriggerCommand extends AbstractCommand {
         boolean found = scheduler.triggerEvent(eventName);
         
         if (found) {
-            context.sendMessage(Message.raw(i18n.getPrefix() + i18n.getMessage("commands.trigger.success", eventName)));
+            context.sendMessage(Message.raw(i18n.getPrefix(player) + i18n.getMessage(player, "commands.trigger.success", eventName)));
         } else {
-            context.sendMessage(Message.raw(i18n.getPrefix() + i18n.getMessage("commands.trigger.not_found", eventName)));
+            context.sendMessage(Message.raw(i18n.getPrefix(player) + i18n.getMessage(player, "commands.trigger.not_found", eventName)));
         }
         
         return CompletableFuture.completedFuture(null);
