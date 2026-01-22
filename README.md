@@ -2,7 +2,7 @@
 
 A powerful and flexible event scheduling plugin for Hytale servers that automatically distributes rewards and executes commands at specific times or intervals.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Version](https://img.shields.io/badge/version-1.2.0-blue)
 ![Hytale](https://img.shields.io/badge/Hytale-Early%20Access-orange)
 ![Java](https://img.shields.io/badge/Java-17%2B-red)
 ![License](https://img.shields.io/badge/license-MIT-green)
