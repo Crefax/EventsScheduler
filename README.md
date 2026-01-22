@@ -140,10 +140,49 @@ The configuration file is located at `mods/EventScheduler/events.json`
 
 ## Supported Commands
 
+### Command Prefixes
+
+| Prefix | Description | Example |
+|--------|-------------|---------|
+| `console:` | Execute as server console (full permissions) | `console:save-all` |
+| `server:` | Alias for console: | `server:restart` |
+| `cmd:` | Execute as the player | `cmd:spawn` |
+| `command:` | Alias for cmd: | `command:home` |
+| `op:` | Execute with OP permissions | `op:kick {player}` |
+| `admin:` | Alias for op: | `admin:ban {player}` |
+
+### Built-in Commands
+
 | Command | Description |
 |---------|-------------|
-| `give <ItemID>` | Give an item to all players |
-| `message <text>` | Send a message to all players |
+| `give <ItemID> [quantity]` | Give item(s) to player |
+| `message <text>` | Send a private message to player |
+| `msg <text>` | Alias for message |
+| `broadcast <text>` | Send message to all online players |
+| `bc <text>` | Alias for broadcast |
+
+### Placeholders
+
+| Placeholder | Description |
+|-------------|-------------|
+| `{player}` | Player's username |
+| `{name}` | Alias for {player} |
+| `{uuid}` | Player's UUID |
+| `{display_name}` | Player's display name |
+
+### Examples
+
+```json
+"commands": [
+    "give Weapon_Sword_Cobalt 1",
+    "message Welcome {player}!",
+    "console:save-all",
+    "console:say Server backup complete!",
+    "op:gamemode creative {player}",
+    "cmd:spawn",
+    "broadcast Event reward distributed to {player}!"
+]
+```
 
 ## Default Events
 

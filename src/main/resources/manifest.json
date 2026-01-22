@@ -2,7 +2,7 @@
     "Group": "EventScheduler",
     "Name": "EventScheduler",
     "Description": "Scheduled event and reward distribution system",
-    "Version": "1.0.0",
+    "Version": "1.2.0",
     "Website": "https://github.com/crefax/hytale-events",
     "Main": "net.crefax.hytale.events.EventSchedulerMod",
     "ServerVersion": "*",

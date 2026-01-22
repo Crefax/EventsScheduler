@@ -43,6 +43,15 @@
                 "message You earned a midnight bonus!"
             ],
             "broadcastMessage": "Midnight bonus! You earned a Cobalt Staff!"
+        },
+        {
+            "name": "scheduled_stop",
+            "enabled": false,
+            "times": ["04:00"],
+            "commands": [
+                "console:stop"
+            ],
+            "broadcastMessage": "Server is shutting down for maintenance!"
         }
     ],
     

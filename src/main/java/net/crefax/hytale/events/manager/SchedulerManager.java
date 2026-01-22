@@ -1,6 +1,9 @@
 package net.crefax.hytale.events.manager;
 
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.HytaleServer;
+import com.hypixel.hytale.server.core.command.system.CommandManager;
+import com.hypixel.hytale.server.core.console.ConsoleSender;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -218,13 +221,50 @@ public class SchedulerManager {
 
     /**
      * Execute command for player
-     * Supported commands:
+     * Supported command prefixes:
+     * - console:<command> : Executes command from server console (full permissions)
+     * - cmd:<command> : Executes command as the player
+     * - op:<command> : Executes command with OP permissions
+     * - server:<command> : Alias for console:
+     * 
+     * Built-in commands (no prefix needed):
      * - give <itemId> <quantity> : Gives item to player
      * - message <text> : Sends message to player
+     * 
+     * Placeholders:
+     * - {player} : Player's username
+     * - {uuid} : Player's UUID
+     * - {display_name} : Player's display name
      */
     private void executeCommandForPlayer(Player player, String command) {
         try {
-            String[] parts = command.trim().split("\\s+", 3);
+            // Replace placeholders
+            String processedCommand = replacePlaceholders(command, player);
+            
+            // Check for command prefixes
+            if (processedCommand.startsWith("console:") || processedCommand.startsWith("server:")) {
+                // Console command - execute with full server permissions
+                String consoleCmd = processedCommand.substring(processedCommand.indexOf(':') + 1).trim();
+                executeConsoleCommand(consoleCmd);
+                return;
+            }
+            
+            if (processedCommand.startsWith("cmd:") || processedCommand.startsWith("command:")) {
+                // Player command - execute as the player
+                String playerCmd = processedCommand.substring(processedCommand.indexOf(':') + 1).trim();
+                executePlayerCommand(player, playerCmd);
+                return;
+            }
+            
+            if (processedCommand.startsWith("op:") || processedCommand.startsWith("admin:")) {
+                // OP command - execute with elevated permissions
+                String opCmd = processedCommand.substring(processedCommand.indexOf(':') + 1).trim();
+                executeOpCommand(player, opCmd);
+                return;
+            }
+            
+            // Built-in commands (legacy support)
+            String[] parts = processedCommand.trim().split("\\s+", 3);
             if (parts.length == 0) return;
             
             String cmd = parts[0].toLowerCase();
@@ -250,20 +290,94 @@ public class SchedulerManager {
                 case "msg":
                     // message <text>
                     if (parts.length >= 2) {
-                        String text = command.substring(cmd.length()).trim();
+                        String text = processedCommand.substring(cmd.length()).trim();
                         player.sendMessage(Message.raw(text));
                     }
                     break;
                     
-                default:
-                    // Unknown command - just log
-                    if (config.getSettings().debugMode) {
-                        LOGGER.info("[EventScheduler] Unknown command: " + cmd);
+                case "broadcast":
+                case "bc":
+                    // broadcast <text> - send to all players
+                    if (parts.length >= 2) {
+                        String text = processedCommand.substring(cmd.length()).trim();
+                        broadcastToAll(text);
                     }
+                    break;
+                    
+                default:
+                    // Try to execute as console command for backward compatibility
+                    executeConsoleCommand(processedCommand);
                     break;
             }
         } catch (Exception e) {
             LOGGER.warning("[EventScheduler] Command error: " + command + " - " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Replace placeholders in command string
+     */
+    private String replacePlaceholders(String command, Player player) {
+        if (player == null) return command;
+        
+        String result = command;
+        PlayerRef ref = player.getPlayerRef();
+        
+        result = result.replace("{player}", ref.getUsername());
+        result = result.replace("{uuid}", ref.getUuid().toString());
+        result = result.replace("{display_name}", player.getDisplayName());
+        result = result.replace("{name}", ref.getUsername());
+        
+        return result;
+    }
+    
+    /**
+     * Execute command from server console (full permissions)
+     */
+    private void executeConsoleCommand(String command) {
+        try {
+            CommandManager commandManager = HytaleServer.get().getCommandManager();
+            commandManager.handleCommand(ConsoleSender.INSTANCE, command);
+            
+            if (config.getSettings().debugMode) {
+                LOGGER.info("[EventScheduler] Console command executed: " + command);
+            }
+        } catch (Exception e) {
+            LOGGER.warning("[EventScheduler] Console command error: " + command + " - " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Execute command as player
+     */
+    private void executePlayerCommand(Player player, String command) {
+        try {
+            CommandManager commandManager = HytaleServer.get().getCommandManager();
+            commandManager.handleCommand(player.getPlayerRef(), command);
+            
+            if (config.getSettings().debugMode) {
+                LOGGER.info("[EventScheduler] Player command executed: " + player.getDisplayName() + " -> " + command);
+            }
+        } catch (Exception e) {
+            LOGGER.warning("[EventScheduler] Player command error: " + command + " - " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Execute command with OP permissions (runs as console on behalf of player)
+     */
+    private void executeOpCommand(Player player, String command) {
+        try {
+            // For OP commands, we execute as console since console has full permissions
+            // The command string may contain {player} placeholder which was already replaced
+            CommandManager commandManager = HytaleServer.get().getCommandManager();
+            commandManager.handleCommand(ConsoleSender.INSTANCE, command);
+            
+            if (config.getSettings().debugMode) {
+                LOGGER.info("[EventScheduler] OP command executed for " + player.getDisplayName() + ": " + command);
+            }
+        } catch (Exception e) {
+            LOGGER.warning("[EventScheduler] OP command error: " + command + " - " + e.getMessage());
         }
     }
     
