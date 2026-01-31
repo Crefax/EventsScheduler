@@ -2,7 +2,7 @@
 
 A powerful and flexible event scheduling plugin for Hytale servers that automatically distributes rewards and executes commands at specific times or intervals.
 
-![Version](https://img.shields.io/badge/version-1.2.0-blue)
+![Version](https://img.shields.io/badge/version-1.2.1-blue)
 ![Hytale](https://img.shields.io/badge/Hytale-Early%20Access-orange)
 ![Java](https://img.shields.io/badge/Java-17%2B-red)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -186,14 +186,58 @@ The configuration file is located at `mods/EventScheduler/events.json`
 
 ## Default Events
 
-The plugin comes with 4 pre-configured events:
+The plugin comes with pre-configured example events:
 
-| Event Name | Type | Timing | Reward | Status |
-|------------|------|--------|--------|--------|
-| hourly_reward | Interval | Every 1 hour | Cobalt Sword | ✅ Enabled |
-| bonus_tools | Interval | Every 2 hours | Crude Pickaxe + Hatchet | ❌ Disabled |
-| morning_reward | Scheduled | 09:00, 12:00, 18:00, 21:00 | Crude Sword + Pickaxe | ✅ Enabled |
-| midnight_bonus | Scheduled | 00:00 | Cobalt Staff + Message | ✅ Enabled |
+| Event Name | Type | Timing | Commands | Status |
+|------------|------|--------|----------|--------|
+| hourly_reward | Interval | Every 1 hour | `give Weapon_Sword_Cobalt` | ✅ Enabled |
+| bonus_tools | Interval | Every 2 hours | `give Tool_Pickaxe_Crude`, `give Tool_Hatchet_Crude` | ❌ Disabled |
+| morning_reward | Scheduled | 09:00, 12:00, 18:00, 21:00 | `give Weapon_Sword_Crude`, `give Tool_Pickaxe_Crude` | ✅ Enabled |
+| midnight_bonus | Scheduled | 00:00 | `give Weapon_Staff_Cobalt`, `message` | ✅ Enabled |
+| scheduled_stop | Scheduled | 04:00 | `console:stop` | ❌ Disabled |
+
+## Console/Admin Command Examples
+
+### Server Restart at 4 AM
+```json
+{
+    "name": "scheduled_stop",
+    "enabled": false,
+    "times": ["04:00"],
+    "commands": [
+        "console:stop"
+    ],
+    "broadcastMessage": "Server is shutting down for maintenance!"
+}
+```
+
+### Auto-Save Every 30 Minutes
+```json
+{
+    "name": "auto_save",
+    "enabled": true,
+    "interval": 1800,
+    "commands": [
+        "console:save-all"
+    ],
+    "broadcastMessage": ""
+}
+```
+
+### Scheduled Restart with Warning
+```json
+{
+    "name": "restart_with_warning",
+    "enabled": false,
+    "times": ["04:00"],
+    "commands": [
+        "broadcast Server restarting in 10 seconds!",
+        "console:save-all",
+        "console:stop"
+    ],
+    "broadcastMessage": "Scheduled maintenance!"
+}
+```
 
 ## Building from Source
 
@@ -211,7 +255,7 @@ cd EventsScheduler
 # Build the project
 mvn clean package
 
-# The JAR will be in target/events-scheduler-1.0.0.jar
+# The JAR will be in target/events-scheduler-1.2.0.jar
 ```
 
 ## Permissions
@@ -244,4 +288,4 @@ Found a bug or have a suggestion? [Open an issue](https://github.com/Crefax/Even
 ---
 
 **Author**: [Crefax](https://github.com/Crefax)  
-**Version**: 1.0.0
+**Version**: 1.2.0

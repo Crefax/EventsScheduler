@@ -177,10 +177,16 @@ public class SchedulerManager {
             broadcastToAll(fullMessage);
         }
         
-        // Execute commands for each player
-        for (Player player : players) {
-            for (String command : commands) {
-                executeCommandForPlayer(player, command);
+        // Process commands - separate global and per-player commands
+        for (String command : commands) {
+            if (isGlobalCommand(command)) {
+                // Global commands run only once (console:, server:, broadcast)
+                executeGlobalCommand(command);
+            } else {
+                // Per-player commands run for each player (give, message, cmd:, op:)
+                for (Player player : players) {
+                    executeCommandForPlayer(player, command);
+                }
             }
         }
         
@@ -202,14 +208,51 @@ public class SchedulerManager {
             LOGGER.info("[EventScheduler] Broadcast: " + fullMessage);
         }
         
-        // Execute commands for each player
-        for (Player player : players) {
-            for (String command : commands) {
-                executeCommandForPlayer(player, command);
+        // Process commands - separate global and per-player commands
+        for (String command : commands) {
+            if (isGlobalCommand(command)) {
+                // Global commands run only once
+                executeGlobalCommand(command);
+            } else {
+                // Per-player commands run for each player
+                for (Player player : players) {
+                    executeCommandForPlayer(player, command);
+                }
             }
         }
         
         LOGGER.info("[EventScheduler] Event manually triggered: " + eventName + " (" + players.size() + " players)");
+    }
+    
+    /**
+     * Check if command is a global command (should run only once, not per-player)
+     */
+    private boolean isGlobalCommand(String command) {
+        String cmd = command.trim().toLowerCase();
+        return cmd.startsWith("console:") || 
+               cmd.startsWith("server:") || 
+               cmd.startsWith("broadcast ") || 
+               cmd.startsWith("bc ");
+    }
+    
+    /**
+     * Execute a global command (runs only once, not per-player)
+     */
+    private void executeGlobalCommand(String command) {
+        try {
+            String cmd = command.trim();
+            
+            if (cmd.toLowerCase().startsWith("console:") || cmd.toLowerCase().startsWith("server:")) {
+                String consoleCmd = cmd.substring(cmd.indexOf(':') + 1).trim();
+                executeConsoleCommand(consoleCmd);
+            } else if (cmd.toLowerCase().startsWith("broadcast ") || cmd.toLowerCase().startsWith("bc ")) {
+                String prefix = cmd.toLowerCase().startsWith("broadcast ") ? "broadcast " : "bc ";
+                String text = cmd.substring(prefix.length()).trim();
+                broadcastToAll(text);
+            }
+        } catch (Exception e) {
+            LOGGER.warning("[EventScheduler] Global command error: " + command + " - " + e.getMessage());
+        }
     }
 
     /**
@@ -220,12 +263,10 @@ public class SchedulerManager {
     }
 
     /**
-     * Execute command for player
+     * Execute command for player (per-player commands only)
      * Supported command prefixes:
-     * - console:<command> : Executes command from server console (full permissions)
      * - cmd:<command> : Executes command as the player
      * - op:<command> : Executes command with OP permissions
-     * - server:<command> : Alias for console:
      * 
      * Built-in commands (no prefix needed):
      * - give <itemId> <quantity> : Gives item to player
@@ -235,17 +276,17 @@ public class SchedulerManager {
      * - {player} : Player's username
      * - {uuid} : Player's UUID
      * - {display_name} : Player's display name
+     * 
+     * Note: Global commands (console:, server:, broadcast) are handled separately
+     * and run only once per event, not per-player.
      */
     private void executeCommandForPlayer(Player player, String command) {
         try {
             // Replace placeholders
             String processedCommand = replacePlaceholders(command, player);
             
-            // Check for command prefixes
-            if (processedCommand.startsWith("console:") || processedCommand.startsWith("server:")) {
-                // Console command - execute with full server permissions
-                String consoleCmd = processedCommand.substring(processedCommand.indexOf(':') + 1).trim();
-                executeConsoleCommand(consoleCmd);
+            // Skip global commands (they are handled by executeGlobalCommand)
+            if (isGlobalCommand(processedCommand)) {
                 return;
             }
             
@@ -295,18 +336,11 @@ public class SchedulerManager {
                     }
                     break;
                     
-                case "broadcast":
-                case "bc":
-                    // broadcast <text> - send to all players
-                    if (parts.length >= 2) {
-                        String text = processedCommand.substring(cmd.length()).trim();
-                        broadcastToAll(text);
-                    }
-                    break;
-                    
                 default:
-                    // Try to execute as console command for backward compatibility
-                    executeConsoleCommand(processedCommand);
+                    // Unknown command - log warning in debug mode
+                    if (config.getSettings().debugMode) {
+                        LOGGER.info("[EventScheduler] Unknown per-player command: " + cmd);
+                    }
                     break;
             }
         } catch (Exception e) {
